@@ -1,4 +1,6 @@
-[![CI Build](https://github.com/waqar-nadeem/devops-capstone-project/actions/workflows/ci-build.yaml/badge.svg)](https://github.com/waqar-nadeem/devops-capstone-project/actions/workflows/ci-build.yaml)
+# DevOps Capstone Project
+
+![Build Status](https://github.com/waqar-nadeem/devops-capstone-project/actions/workflows/ci-build.yaml/badge.svg)
 
 IBM Developer skills devops capstone project.
 
