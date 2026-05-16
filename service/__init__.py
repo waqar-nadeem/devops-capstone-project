@@ -11,9 +11,12 @@ from flask_talisman import Talisman
 from service import config
 from service.common import log_handlers
 
+
 # Create Flask application
 app = Flask(__name__)
 app.config.from_object(config)
+
+talisman = Talisman(app, force_https=False)
 
 # Initialize Security Headers and CORS Policies
 CORS(app)
