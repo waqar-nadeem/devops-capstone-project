@@ -1,17 +1,24 @@
+#
+# This pipeline needs the following tasks from Tekton Catalog
+#   - git-clone
+#   - flake8
+#
+---
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
-metadata:
+metadata:  
   name: cd-pipeline
 spec:
+  workspaces:
+    - name: pipeline-workspace
   params:
     - name: repo-url
       type: string
     - name: branch
       type: string
-      default: "main"
+      default: main
     - name: build-image
       type: string
-
   tasks:
     - name: clone
       taskRef:
@@ -66,3 +73,21 @@ spec:
       runAfter:
         - lint
         - tests
+    - name: deploy
+      workspaces:
+        - name: manifest-dir
+          workspace: pipeline-workspace
+      taskRef:
+        name: openshift-client
+        kind: ClusterTask
+      params:
+      - name: SCRIPT
+        value: |
+          echo "Updating manifest..."
+          sed -i "s|IMAGE_NAME_HERE|$(params.build-image)|g" deploy/deployment.yaml
+          cat deploy/deployment.yaml
+          echo "Deploying to OpenShift..."
+          oc apply -f deploy/
+          oc get pods -l app=accounts
+      runAfter:
+        - build
